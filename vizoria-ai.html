@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="VIZORIA AI transforms boring theoretical concepts into unforgettable animated storytelling videos. Don't memorize. Visualize.">
+<meta name="keywords" content="AI education, visual learning, animated learning, storytelling AI, EdTech">
+<title>VIZORIA AI — Don't Memorize. Visualize.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0A0A1A;
+    --deep: #080B1F;
+    --cosmic: #0D1140;
+    --iris: #5B4EFF;
+    --violet: #8B5CF6;
+    --aurora: #A78BFA;
+    --spark: #C4B5FD;
+    --sky: #38BDF8;
+    --mint: #34D399;
+    --sun: #FCD34D;
+    --coral: #FB7185;
+    --white: #FFFFFF;
+    --mist: #F1F0FF;
+    --glass: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.12);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--deep);
+    color: var(--white);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: var(--iris); border-radius: 2px; }
+
+  /* ── LOADING ── */
+  #loader {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--deep);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1.5rem;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+  #loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-logo {
+    font-family: var(--font-display);
+    font-size: 2.5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--iris), var(--aurora), var(--sky));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+  .loader-bar {
+    width: 200px; height: 2px;
+    background: var(--glass-border); border-radius: 1px; overflow: hidden;
+  }
+  .loader-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--iris), var(--aurora));
+    border-radius: 1px;
+    animation: loadFill 1.4s ease forwards;
+  }
+  @keyframes loadFill { from { width: 0; } to { width: 100%; } }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(20px);
+    background: rgba(8, 11, 31, 0.7);
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--aurora), var(--sky));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.01em;
+  }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a {
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--iris), var(--violet));
+    color: var(--white) !important;
+    padding: 0.55rem 1.25rem;
+    border-radius: 100px;
+    font-weight: 600 !important;
+    transition: opacity 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.9; transform: translateY(-1px) !important; }
+  .nav-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--white); font-size: 1.4rem; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 7rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(91,78,255,0.25) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 80% 70%, rgba(56,189,248,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 20% 60%, rgba(167,139,250,0.12) 0%, transparent 60%);
+  }
+  .hero-orbs { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.3;
+    animation: floatOrb 8s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: var(--iris); top: -100px; left: -100px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: var(--violet); bottom: -80px; right: -80px; animation-delay: 3s; }
+  .orb-3 { width: 300px; height: 300px; background: var(--sky); top: 40%; right: 10%; animation-delay: 1.5s; }
+  @keyframes floatOrb {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(20px, -20px) scale(1.05); }
+  }
+
+  /* Grid particles */
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(91,78,255,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91,78,255,0.08) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 860px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    padding: 0.4rem 1rem; border-radius: 100px;
+    font-size: 0.8rem; font-weight: 600;
+    color: var(--aurora); margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--mint);
+    animation: pulse 1.5s ease infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+  .grad-text {
+    background: linear-gradient(135deg, var(--white) 0%, var(--aurora) 50%, var(--sky) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255,255,255,0.65);
+    max-width: 560px; margin: 0 auto 2.5rem;
+    font-weight: 400; line-height: 1.7;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.45s both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--iris), var(--violet));
+    color: var(--white); border: none; cursor: pointer;
+    padding: 0.9rem 2rem; border-radius: 100px;
+    font-family: var(--font-body); font-size: 1rem; font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 30px rgba(91,78,255,0.4);
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(91,78,255,0.6); }
+  .btn-ghost {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    color: var(--white); cursor: pointer;
+    padding: 0.9rem 2rem; border-radius: 100px;
+    font-family: var(--font-body); font-size: 1rem; font-weight: 600;
+    transition: background 0.2s, transform 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    text-decoration: none;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+  .play-icon { font-size: 0.85rem; }
+
+  /* Concept transformation animation */
+  .hero-transform {
+    margin-top: 4rem;
+    animation: fadeUp 0.8s ease 0.6s both;
+    position: relative;
+  }
+  .transform-card {
+    display: inline-flex; align-items: center; gap: 1.5rem;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    padding: 1rem 1.5rem; border-radius: 16px;
+    font-size: 0.9rem;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .transform-item { display: flex; align-items: center; gap: 0.5rem; }
+  .transform-label { color: rgba(255,255,255,0.5); font-size: 0.75rem; }
+  .transform-text { font-weight: 600; }
+  .transform-text.boring { color: rgba(255,255,255,0.4); text-decoration: line-through; }
+  .transform-text.vivid {
+    background: linear-gradient(135deg, var(--mint), var(--sky));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .transform-arrow { color: var(--iris); font-size: 1.2rem; }
+
+  /* ── SHARED LAYOUT ── */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--aurora);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .section-desc {
+    font-size: 1.05rem; color: rgba(255,255,255,0.6);
+    max-width: 520px; line-height: 1.7;
+  }
+
+  /* ── PROBLEM ── */
+  #problem { background: var(--ink); }
+  .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .problem-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 2rem;
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .problem-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(91,78,255,0.06), transparent);
+    border-radius: inherit;
+  }
+  .problem-card:hover { transform: translateY(-4px); border-color: var(--iris); }
+  .problem-stat {
+    font-family: var(--font-display);
+    font-size: 3rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--coral), var(--sun));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+  .problem-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .problem-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+  /* ── SOLUTION ── */
+  #solution { background: var(--deep); }
+  .solution-flow { margin-top: 3.5rem; display: flex; flex-direction: column; gap: 0; }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 2rem;
+    padding: 2rem 0;
+    border-left: 2px solid var(--glass-border);
+    padding-left: 2.5rem; margin-left: 1rem;
+    position: relative;
+    transition: border-color 0.3s;
+    cursor: default;
+  }
+  .flow-step:hover { border-left-color: var(--iris); }
+  .flow-dot {
+    position: absolute; left: -10px; top: 2.2rem;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--deep); border: 2px solid var(--glass-border);
+    transition: border-color 0.3s, background 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .flow-step:hover .flow-dot {
+    border-color: var(--iris); background: var(--iris);
+  }
+  .flow-inner-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--iris); opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .flow-step:hover .flow-inner-dot { opacity: 1; }
+  .flow-icon { font-size: 2rem; flex-shrink: 0; margin-top: 0.2rem; }
+  .flow-info {}
+  .flow-name { font-size: 0.75rem; font-weight: 700; color: var(--aurora); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; }
+  .flow-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .flow-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+  /* ── LIVE DEMO ── */
+  #demo { background: var(--ink); }
+  .demo-wrap {
+    margin-top: 3rem;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 24px; overflow: hidden;
+    backdrop-filter: blur(20px);
+  }
+  .demo-input-area { padding: 2rem; border-bottom: 1px solid var(--glass-border); }
+  .demo-input-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 0.75rem; font-weight: 500; }
+  .demo-input-row { display: flex; gap: 1rem; align-items: flex-end; }
+  .demo-textarea {
+    flex: 1;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+    border-radius: 12px; padding: 1rem;
+    color: var(--white); font-family: var(--font-body); font-size: 1rem;
+    resize: none; outline: none; min-height: 60px;
+    transition: border-color 0.2s;
+  }
+  .demo-textarea:focus { border-color: var(--iris); }
+  .demo-textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .btn-generate {
+    background: linear-gradient(135deg, var(--iris), var(--violet));
+    color: var(--white); border: none; cursor: pointer;
+    padding: 0.9rem 1.75rem; border-radius: 12px;
+    font-family: var(--font-body); font-size: 0.95rem; font-weight: 700;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap; flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(91,78,255,0.35);
+  }
+  .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(91,78,255,0.5); }
+  .btn-generate:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .demo-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+  .chip {
+    background: rgba(91,78,255,0.15); border: 1px solid rgba(91,78,255,0.3);
+    color: var(--aurora); padding: 0.3rem 0.75rem; border-radius: 100px;
+    font-size: 0.8rem; font-weight: 500; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .chip:hover { background: rgba(91,78,255,0.3); transform: translateY(-1px); }
+
+  .demo-output { padding: 2rem; display: none; }
+  .demo-output.visible { display: block; animation: fadeUp 0.4s ease; }
+  .demo-output-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .demo-output-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(52,211,153,0.15); border: 1px solid rgba(52,211,153,0.3);
+    color: var(--mint); padding: 0.3rem 0.75rem; border-radius: 100px;
+    font-size: 0.75rem; font-weight: 700;
+  }
+  .demo-output-title {
+    font-family: var(--font-display); font-size: 1.5rem;
+    font-weight: 800; margin-bottom: 0.25rem;
+  }
+  .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .demo-scene-card {
+    background: rgba(91,78,255,0.08); border: 1px solid rgba(91,78,255,0.2);
+    border-radius: 14px; padding: 1.25rem;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .demo-scene-card:hover { transform: translateY(-3px); border-color: var(--iris); }
+  .scene-num { font-size: 0.7rem; font-weight: 700; color: var(--aurora); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .scene-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+  .scene-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .scene-desc { font-size: 0.78rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+  .demo-loading { text-align: center; padding: 2rem; display: none; }
+  .demo-loading.visible { display: block; animation: fadeUp 0.3s ease; }
+  .demo-loading p { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-top: 1rem; }
+  .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid rgba(91,78,255,0.2);
+    border-top-color: var(--iris);
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── FEATURES ── */
+  #features { background: var(--deep); }
+  .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 3rem; }
+  .feature-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 1.75rem;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--iris), var(--aurora));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+    border-radius: 0 0 20px 20px;
+  }
+  .feature-card:hover { transform: translateY(-5px); border-color: rgba(91,78,255,0.4); box-shadow: 0 20px 60px rgba(91,78,255,0.15); }
+  .feature-card:hover::after { transform: scaleX(1); }
+  .feature-emoji { font-size: 2rem; margin-bottom: 1rem; }
+  .feature-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .feature-text { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+  /* ── REVOLUTION ── */
+  #revolution { background: var(--ink); position: relative; overflow: hidden; }
+  .rev-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(91,78,255,0.12) 0%, transparent 70%);
+  }
+  .rev-timeline { position: relative; margin-top: 4rem; }
+  .rev-track {
+    position: absolute; top: 50%; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, transparent, var(--iris), var(--aurora), var(--sky), transparent);
+    transform: translateY(-50%);
+  }
+  .rev-items {
+    display: flex; justify-content: space-between; position: relative; z-index: 2;
+    gap: 1rem; align-items: flex-end;
+  }
+  .rev-item {
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    flex: 1; cursor: default;
+  }
+  .rev-item:nth-child(even) { flex-direction: column-reverse; }
+  .rev-node {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--ink); border: 2px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .rev-item:hover .rev-node {
+    border-color: var(--iris); transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(91,78,255,0.4);
+  }
+  .rev-item.active .rev-node {
+    background: linear-gradient(135deg, var(--iris), var(--violet));
+    border-color: var(--iris); box-shadow: 0 0 30px rgba(91,78,255,0.5);
+  }
+  .rev-info { text-align: center; padding: 1rem; }
+  .rev-era { font-size: 0.65rem; font-weight: 700; color: var(--aurora); letter-spacing: 0.1em; text-transform: uppercase; }
+  .rev-name { font-size: 0.88rem; font-weight: 700; margin-top: 0.25rem; }
+  .rev-sub { font-size: 0.72rem; color: rgba(255,255,255,0.45); margin-top: 0.15rem; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { background: var(--deep); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .testi-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 2rem;
+    transition: transform 0.3s;
+  }
+  .testi-card:hover { transform: translateY(-4px); }
+  .testi-stars { color: var(--sun); font-size: 0.85rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+  .testi-quote { font-size: 0.92rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 0.75rem; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--iris), var(--violet));
+  }
+  .testi-name { font-size: 0.9rem; font-weight: 700; }
+  .testi-role { font-size: 0.77rem; color: rgba(255,255,255,0.45); }
+
+  /* ── IMPACT ── */
+  #impact { background: var(--ink); }
+  .impact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .impact-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 2rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .impact-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(91,78,255,0.08), transparent);
+  }
+  .impact-num {
+    font-family: var(--font-display);
+    font-size: 2.8rem; font-weight: 800; line-height: 1;
+    background: linear-gradient(135deg, var(--iris), var(--aurora));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+  .impact-label { font-size: 0.88rem; font-weight: 600; color: rgba(255,255,255,0.7); }
+
+  /* ── PRICING ── */
+  #pricing { background: var(--deep); }
+  .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 3rem; align-items: start; }
+  .price-card {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 24px; padding: 2rem;
+    position: relative; transition: transform 0.3s;
+  }
+  .price-card:hover { transform: translateY(-5px); }
+  .price-card.featured {
+    background: linear-gradient(135deg, rgba(91,78,255,0.2), rgba(139,92,246,0.15));
+    border-color: var(--iris);
+    box-shadow: 0 0 60px rgba(91,78,255,0.2);
+  }
+  .price-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--iris), var(--violet));
+    color: var(--white); font-size: 0.7rem; font-weight: 700;
+    padding: 0.25rem 0.75rem; border-radius: 100px; white-space: nowrap;
+  }
+  .price-plan { font-size: 0.75rem; font-weight: 700; color: var(--aurora); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .price-amount { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .price-period { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-bottom: 1.5rem; }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.75rem; }
+  .price-features li { font-size: 0.85rem; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 0.5rem; }
+  .price-features li::before { content: '✓'; color: var(--mint); font-weight: 700; flex-shrink: 0; }
+  .btn-plan {
+    width: 100%; padding: 0.8rem; border-radius: 12px;
+    font-family: var(--font-body); font-size: 0.9rem; font-weight: 700;
+    cursor: pointer; border: 1px solid var(--glass-border);
+    background: transparent; color: var(--white);
+    transition: all 0.2s;
+  }
+  .btn-plan:hover { background: var(--glass); }
+  .price-card.featured .btn-plan {
+    background: linear-gradient(135deg, var(--iris), var(--violet));
+    border: none; box-shadow: 0 0 20px rgba(91,78,255,0.4);
+  }
+  .price-card.featured .btn-plan:hover { box-shadow: 0 0 35px rgba(91,78,255,0.6); transform: translateY(-1px); }
+
+  /* ── CTA ── */
+  #cta {
+    background: var(--ink);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(91,78,255,0.2) 0%, transparent 70%);
+  }
+  .cta-content { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800; line-height: 1.1; letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+  .cta-sub {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--iris), var(--aurora), var(--sky));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 1.5rem;
+  }
+  .cta-desc { font-size: 1rem; color: rgba(255,255,255,0.55); margin-bottom: 2.5rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--deep);
+    border-top: 1px solid var(--glass-border);
+    padding: 3rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: var(--font-display); font-size: 1.2rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--aurora), var(--sky));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { color: rgba(255,255,255,0.3); font-size: 0.8rem; margin-top: 0.5rem; text-align: center; width: 100%; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── DARK MODE adjustments already default ── */
+  @media (prefers-color-scheme: light) {
+    /* Keep the futuristic dark look regardless */
+    body { background: var(--deep); color: var(--white); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .problem-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    .rev-items { flex-direction: column; align-items: center; }
+    .rev-track { display: none; }
+    .rev-item { flex-direction: row !important; align-items: center; gap: 1rem; justify-content: flex-start; width: 100%; max-width: 400px; }
+    .rev-info { text-align: left; }
+    .demo-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(8,11,31,0.98); padding: 1.5rem; border-bottom: 1px solid var(--glass-border); }
+    .nav-toggle { display: block; }
+    section { padding: 4rem 1.25rem; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .features-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr 1fr; }
+    .demo-input-row { flex-direction: column; }
+    .btn-generate { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">VIZORIA AI</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">VIZORIA AI</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#problem">Problem</a>
+    <a href="#solution">Solution</a>
+    <a href="#demo">Demo</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#demo" class="nav-cta">Try Free</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero" role="banner">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Powered by AI Storytelling Engine
+    </div>
+    <h1 class="hero-headline">
+      Don't Memorize.<br><span class="grad-text">Visualize.</span>
+    </h1>
+    <p class="hero-sub">
+      Transform any theory into AI-generated storytelling videos that students remember — not for days, but forever.
+    </p>
+    <div class="hero-btns">
+      <a href="#demo" class="btn-primary">Try VIZORIA AI →</a>
+      <a href="#solution" class="btn-ghost"><span class="play-icon">▶</span> Watch How It Works</a>
+    </div>
+    <div class="hero-transform">
+      <div class="transform-card">
+        <div class="transform-item">
+          <div>
+            <div class="transform-label">Before</div>
+            <div class="transform-text boring">"A loop repeats code."</div>
+          </div>
+        </div>
+        <div class="transform-arrow">✦</div>
+        <div class="transform-item">
+          <div>
+            <div class="transform-label">After VIZORIA AI</div>
+            <div class="transform-text vivid">🤖 Robot collects 5 apples, one by one</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-eyebrow">The Reality</span>
+      <h2 class="section-title">Why Students Forget</h2>
+      <p class="section-desc">The education system hasn't changed its core delivery in a century. Students are paying the price.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card reveal reveal-delay-1">
+        <div class="problem-stat">73%</div>
+        <div class="problem-title">Forgotten Within a Week</div>
+        <div class="problem-desc">Rote memorization fails fast. Students cram for exams and forget within days — because there's no story, no anchor, no emotion attached.</div>
+      </div>
+      <div class="problem-card reveal reveal-delay-2">
+        <div class="problem-stat">58%</div>
+        <div class="problem-title">Can't Visualize Abstract Ideas</div>
+        <div class="problem-desc">Concepts like recursion, photosynthesis, or supply curves are invisible. Students repeat words without ever building a mental image.</div>
+      </div>
+      <div class="problem-card reveal reveal-delay-3">
+        <div class="problem-stat">2.4×</div>
+        <div class="problem-title">Slower Than Visual Learning</div>
+        <div class="problem-desc">Text-only teaching is provably slower. The brain processes visuals 60,000 times faster — yet classrooms are still walls of text.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-eyebrow">How It Works</span>
+      <h2 class="section-title">Meet VIZORIA AI</h2>
+      <p class="section-desc">Five steps from a lifeless theory to a living story that sticks in memory permanently.</p>
+    </div>
+    <div class="solution-flow reveal">
+      <div class="flow-step">
+        <div class="flow-dot"><div class="flow-inner-dot"></div></div>
+        <div class="flow-icon">📝</div>
+        <div class="flow-info">
+          <div class="flow-name">Step 01</div>
+          <div class="flow-title">You type any concept</div>
+          <div class="flow-desc">Newton's Laws. Recursion. The French Revolution. Photosynthesis. Any topic, any language, any level of complexity.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot"><div class="flow-inner-dot"></div></div>
+        <div class="flow-icon">🧠</div>
+        <div class="flow-info">
+          <div class="flow-name">Step 02</div>
+          <div class="flow-title">AI decodes the theory</div>
+          <div class="flow-desc">Our engine breaks down the concept into its core mechanics, cause-effect relationships, and emotional hooks worth animating.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot"><div class="flow-inner-dot"></div></div>
+        <div class="flow-icon">✍️</div>
+        <div class="flow-info">
+          <div class="flow-name">Step 03</div>
+          <div class="flow-title">Story is born</div>
+          <div class="flow-desc">Characters, scenes, conflict, and resolution emerge. Not random — every narrative element is engineered to teach the concept through experience.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot"><div class="flow-inner-dot"></div></div>
+        <div class="flow-icon">🎬</div>
+        <div class="flow-info">
+          <div class="flow-name">Step 04</div>
+          <div class="flow-title">Animated video is generated</div>
+          <div class="flow-desc">A cinematic, narrated animation plays out the story — visual metaphors doing what text never could.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot"><div class="flow-inner-dot"></div></div>
+        <div class="flow-icon">💡</div>
+        <div class="flow-info">
+          <div class="flow-name">Step 05</div>
+          <div class="flow-title">You understand. Forever.</div>
+          <div class="flow-desc">No cramming. No forgetting. The concept is now a story you lived — and stories don't disappear from memory.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section id="demo">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-eyebrow">Live Experience</span>
+      <h2 class="section-title">See It In Action</h2>
+      <p class="section-desc">Type any concept and watch VIZORIA AI turn it into a story blueprint in seconds.</p>
+    </div>
+    <div class="demo-wrap reveal">
+      <div class="demo-input-area">
+        <div class="demo-input-label">Enter a concept to visualize</div>
+        <div class="demo-input-row">
+          <textarea class="demo-textarea" id="demoInput" placeholder="e.g. Newton's First Law of Motion..." rows="2"></textarea>
+          <button class="btn-generate" id="demoBtn" onclick="generateDemo()">Generate Story ✦</button>
+        </div>
+        <div class="demo-chips">
+          <span class="chip" onclick="fillChip('Newton\'s Laws of Motion')">Newton's Laws</span>
+          <span class="chip" onclick="fillChip('Photosynthesis')">Photosynthesis</span>
+          <span class="chip" onclick="fillChip('Recursion in Programming')">Recursion</span>
+          <span class="chip" onclick="fillChip('Supply and Demand')">Supply & Demand</span>
+          <span class="chip" onclick="fillChip('DNA Replication')">DNA Replication</span>
+        </div>
+      </div>
+      <div class="demo-loading" id="demoLoading">
+        <div class="spinner"></div>
+        <p id="loadingMsg">AI is crafting your story…</p>
+      </div>
+      <div class="demo-output" id="demoOutput">
+        <div class="demo-output-header">
+          <div class="demo-output-badge">✦ Story Generated</div>
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.4)">Powered by VIZORIA AI Engine</div>
+        </div>
+        <div class="demo-output-title" id="storyTitle"></div>
+        <div style="font-size:0.88rem;color:rgba(255,255,255,0.55);margin-bottom:0.5rem;" id="storyTagline"></div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.5rem;" id="storyMeta"></div>
+        <div class="demo-grid" id="storyScenes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-eyebrow">Capabilities</span>
+      <h2 class="section-title">Everything You Need to Learn Visually</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-emoji">🎬</div>
+        <div class="feature-name">AI Storytelling Engine</div>
+        <div class="feature-text">Transforms any topic into cinematic narratives with characters, conflict, and resolution.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-emoji">🧠</div>
+        <div class="feature-name">Personalized Learning Paths</div>
+        <div class="feature-text">Adapts complexity, visual style, and pacing to each learner's unique comprehension speed.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-emoji">♿</div>
+        <div class="feature-name">Accessibility First</div>
+        <div class="feature-text">Screen-reader friendly, dyslexia-optimized typography, closed captions, and high-contrast modes.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-emoji">🌍</div>
+        <div class="feature-name">Multilingual Narration</div>
+        <div class="feature-text">Stories generated and narrated in 40+ languages. Learn in your mother tongue.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-emoji">🎮</div>
+        <div class="feature-name">Gamified Learning</div>
+        <div class="feature-text">Quizzes emerge from story events. Streaks, badges, and challenges keep momentum alive.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-emoji">📶</div>
+        <div class="feature-name">Offline Learning Packs</div>
+        <div class="feature-text">Download full subject libraries for zero-connectivity environments and rural schools.</div>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-emoji">📈</div>
+        <div class="feature-name">Teacher Analytics</div>
+        <div class="feature-text">Live dashboards reveal which concepts students struggle with before the next class.</div>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-emoji">🖼</div>
+        <div class="feature-name">Real-Time Visual Generation</div>
+        <div class="feature-text">Custom illustrated scenes generated on-the-fly — never the same stock art twice.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVOLUTION -->
+<section id="revolution">
+  <div class="rev-bg"></div>
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:1rem;">
+      <span class="section-eyebrow">The Visualization Revolution</span>
+      <h2 class="section-title">Education Has Always Been Evolving</h2>
+      <p class="section-desc" style="margin:0 auto;">Every decade brought a leap. This one is different — it's not a new medium. It's a new understanding.</p>
+    </div>
+    <div class="rev-timeline reveal">
+      <div class="rev-track"></div>
+      <div class="rev-items">
+        <div class="rev-item">
+          <div class="rev-node">📜</div>
+          <div class="rev-info">
+            <div class="rev-era">1400s</div>
+            <div class="rev-name">Books</div>
+            <div class="rev-sub">Static text. Memory required.</div>
+          </div>
+        </div>
+        <div class="rev-item">
+          <div class="rev-node">🖥</div>
+          <div class="rev-info">
+            <div class="rev-era">1980s</div>
+            <div class="rev-name">Slides</div>
+            <div class="rev-sub">Text with bullets.</div>
+          </div>
+        </div>
+        <div class="rev-item">
+          <div class="rev-node">🎥</div>
+          <div class="rev-info">
+            <div class="rev-era">2000s</div>
+            <div class="rev-name">Videos</div>
+            <div class="rev-sub">Passive watching.</div>
+          </div>
+        </div>
+        <div class="rev-item">
+          <div class="rev-node">🖱</div>
+          <div class="rev-info">
+            <div class="rev-era">2010s</div>
+            <div class="rev-name">Interactive</div>
+            <div class="rev-sub">Click. Explore. Quiz.</div>
+          </div>
+        </div>
+        <div class="rev-item active">
+          <div class="rev-node">✦</div>
+          <div class="rev-info">
+            <div class="rev-era">Now</div>
+            <div class="rev-name">AI Storytelling</div>
+            <div class="rev-sub">Experience. Not memorize.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem;" class="reveal">
+      <p style="font-size:1.1rem;color:rgba(255,255,255,0.6);max-width:500px;margin:0 auto;line-height:1.7;">
+        VIZORIA AI is not the next step in a series.<br>
+        <strong style="color:var(--white);">It's where the series was always heading.</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-eyebrow">Real Impact</span>
+      <h2 class="section-title">Students Who Stopped Memorizing</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"I'd read about Newton's laws twelve times. After VIZORIA AI showed me the astronaut floating in space and bumping into a satellite — I got it in thirty seconds. I'll never forget it."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👩‍🎓</div>
+          <div>
+            <div class="testi-name">Priya Sharma</div>
+            <div class="testi-role">Class 11 Student, Pune</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"I assign VIZORIA AI stories before every concept introduction. Students come to class already having experienced the idea — our discussion depth has tripled."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👨‍🏫</div>
+          <div>
+            <div class="testi-name">Mr. Arjun Rajan</div>
+            <div class="testi-role">Biology Teacher, Chennai</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-3">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"My son has dyslexia. Reading textbooks was a wall he couldn't climb. VIZORIA AI gave him a door. He now explains recursion to me. I couldn't be more grateful."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div>
+            <div class="testi-name">Meena Krishnan</div>
+            <div class="testi-role">Parent, Bengaluru</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"Preparing for UPSC, I used VIZORIA AI for every economic concept. Supply and demand finally made sense when I watched a street market simulation unfold as a story."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">🧑‍💼</div>
+          <div>
+            <div class="testi-name">Rahul Mehta</div>
+            <div class="testi-role">UPSC Aspirant, Delhi</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"Our school adopted VIZORIA AI across 8 classrooms. End-of-term test scores improved across every subject. It's the single most impactful ed-tech investment we've made."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">👩‍💼</div>
+          <div>
+            <div class="testi-name">Dr. Leena Iyer</div>
+            <div class="testi-role">School Principal, Hyderabad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-3">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"I'm a visual learner who always struggled with chemistry. After watching the VIZORIA story of atoms bonding like people at a party — chemistry clicked. I topped my semester."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">🧑‍🎓</div>
+          <div>
+            <div class="testi-name">Kavya Nair</div>
+            <div class="testi-role">Engineering Student, Kochi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:0;">
+      <span class="section-eyebrow">By the Numbers</span>
+      <h2 class="section-title">The Impact Is Measurable</h2>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card reveal reveal-delay-1">
+        <div class="impact-num" data-target="90">0%</div>
+        <div class="impact-label">Better Long-Term Retention</div>
+      </div>
+      <div class="impact-card reveal reveal-delay-2">
+        <div class="impact-num" data-target="3" data-suffix="×">0×</div>
+        <div class="impact-label">Faster Concept Understanding</div>
+      </div>
+      <div class="impact-card reveal reveal-delay-3">
+        <div class="impact-num" data-target="100" data-suffix="+">0+</div>
+        <div class="impact-label">Subjects Supported</div>
+      </div>
+      <div class="impact-card reveal">
+        <div class="impact-num">∀</div>
+        <div class="impact-label">Inclusive — Every Learner</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-eyebrow">Simple Pricing</span>
+      <h2 class="section-title">Start Free. Scale When Ready.</h2>
+      <p class="section-desc" style="margin:0 auto;">No credit card needed to experience the future of learning.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal reveal-delay-1">
+        <div class="price-plan">Free</div>
+        <div class="price-amount">₹0</div>
+        <div class="price-period">forever free</div>
+        <ul class="price-features">
+          <li>5 story videos per month</li>
+          <li>All core subjects</li>
+          <li>HD video quality</li>
+          <li>Community support</li>
+        </ul>
+        <button class="btn-plan">Get Started →</button>
+      </div>
+      <div class="price-card featured reveal reveal-delay-2">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-plan">Student</div>
+        <div class="price-amount">₹199</div>
+        <div class="price-period">per month</div>
+        <ul class="price-features">
+          <li>Unlimited story videos</li>
+          <li>Offline packs download</li>
+          <li>Multilingual narration</li>
+          <li>Gamified quizzes</li>
+          <li>Priority generation</li>
+        </ul>
+        <button class="btn-plan">Start Learning →</button>
+      </div>
+      <div class="price-card reveal reveal-delay-3">
+        <div class="price-plan">School</div>
+        <div class="price-amount">₹999</div>
+        <div class="price-period">per month / classroom</div>
+        <ul class="price-features">
+          <li>Up to 40 students</li>
+          <li>Teacher analytics dashboard</li>
+          <li>Custom curriculum mapping</li>
+          <li>LMS integration</li>
+          <li>Dedicated support</li>
+        </ul>
+        <button class="btn-plan">Request Demo →</button>
+      </div>
+      <div class="price-card reveal">
+        <div class="price-plan">Enterprise</div>
+        <div class="price-amount">Custom</div>
+        <div class="price-period">institution-wide</div>
+        <ul class="price-features">
+          <li>Unlimited classrooms</li>
+          <li>White-label option</li>
+          <li>Custom AI fine-tuning</li>
+          <li>On-premise deployment</li>
+          <li>SLA + dedicated team</li>
+        </ul>
+        <button class="btn-plan">Contact Sales →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta">
+  <div class="cta-bg"></div>
+  <div class="container">
+    <div class="cta-content reveal">
+      <h2 class="cta-title">The Future of Education Isn't Memorization.</h2>
+      <div class="cta-sub">It's Visualization.</div>
+      <p class="cta-desc">Join thousands of students who stopped cramming and started experiencing knowledge.</p>
+      <a href="#demo" class="btn-primary" style="font-size:1.05rem;padding:1rem 2.5rem;">Start Learning Through Stories →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">VIZORIA AI</div>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Careers</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copy">© 2025 VIZORIA AI. Transforming education through the power of visual storytelling.</div>
+  </div>
+</footer>
+
+<script>
+// ── LOADER ──
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1600);
+});
+
+// ── NAV TOGGLE ──
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Close nav on link click
+document.querySelectorAll('#navLinks a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Animate counters when impact section visible
+      if (entry.target.closest('#impact')) {
+        animateCounters();
+      }
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── IMPACT COUNTERS ──
+let countersAnimated = false;
+function animateCounters() {
+  if (countersAnimated) return;
+  countersAnimated = true;
+  document.querySelectorAll('.impact-num[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '%';
+    let current = 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = Math.floor(current) + suffix;
+      if (current >= target) clearInterval(timer);
+    }, 20);
+  });
+}
+
+// ── DEMO ──
+const demoStories = {
+  default: {
+    title: "The Story of {concept}",
+    tagline: "A cinematic learning journey engineered for lasting memory",
+    characters: ["🧑 The Curious Learner", "🤖 AI Guide", "🌍 The World of {concept}"],
+    scenes: [
+      { icon: "🌅", title: "The Ordinary World", desc: "We meet our hero — a student confused by abstract text. Something important is missing." },
+      { icon: "✦", title: "The Concept Awakens", desc: "The AI Guide appears. '{concept}' isn't just theory — it's the invisible law shaping everything around us." },
+      { icon: "🎭", title: "Living the Idea", desc: "Our hero enters the world of the concept — experiencing it through events, choices, and consequences." },
+      { icon: "🏆", title: "The Revelation", desc: "The concept reveals its deeper truth. The hero — and the student — understands it in a way that cannot be unlearned." },
+      { icon: "🌟", title: "Return with Knowledge", desc: "Back in the real world, the hero sees {concept} everywhere. The idea is now a permanent lens on reality." },
+      { icon: "🧩", title: "Quiz: Did it Stick?", desc: "Three questions arise from story events — not from the textbook. The hero knows the answers. So does the student." }
+    ]
+  }
+};
+
+const loadingMessages = [
+  "Reading your concept…",
+  "Identifying the core mechanics…",
+  "Building characters and world…",
+  "Writing scene-by-scene narrative…",
+  "Story ready ✦"
+];
+
+function fillChip(text) {
+  document.getElementById('demoInput').value = text;
+  document.getElementById('demoInput').focus();
+}
+
+async function generateDemo() {
+  const input = document.getElementById('demoInput').value.trim();
+  if (!input) {
+    document.getElementById('demoInput').focus();
+    return;
+  }
+
+  const btn = document.getElementById('demoBtn');
+  const loading = document.getElementById('demoLoading');
+  const output = document.getElementById('demoOutput');
+  const msgEl = document.getElementById('loadingMsg');
+
+  btn.disabled = true;
+  output.classList.remove('visible');
+  loading.classList.add('visible');
+
+  // Cycle through loading messages
+  let msgIdx = 0;
+  const msgTimer = setInterval(() => {
+    msgIdx = (msgIdx + 1) % loadingMessages.length;
+    msgEl.textContent = loadingMessages[msgIdx];
+  }, 600);
+
+  // Simulate generation (in production this would call real AI API)
+  await new Promise(r => setTimeout(r, 3200));
+
+  clearInterval(msgTimer);
+  loading.classList.remove('visible');
+
+  // Generate story content
+  const story = generateStoryContent(input);
+  renderStory(story, input);
+
+  output.classList.add('visible');
+  output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  btn.disabled = false;
+}
+
+function generateStoryContent(concept) {
+  const conceptLower = concept.toLowerCase();
+  
+  if (conceptLower.includes('newton') || conceptLower.includes('law of motion') || conceptLower.includes('force')) {
+    return {
+      title: "The Astronaut and the Silent Push",
+      tagline: "An astronaut discovers that the universe never rests — and never stops moving either.",
+      scenes: [
+        { icon: "🚀", title: "Adrift in Space", desc: "ARIA the astronaut floats weightless. She pushes a wrench — it drifts away forever. Nobody told her it wouldn't stop. Newton's First Law, in her hands." },
+        { icon: "💥", title: "The Crash Calculation", desc: "An asteroid rushes toward the station. ARIA must fire thrusters. The bigger the rock, the harder to redirect — she feels mass resistance in real time. Newton's Second Law." },
+        { icon: "🔁", title: "The Perfect Reaction", desc: "ARIA fires her jetpack backward — and flies forward. Every push has an equal opposite answer. The universe keeps its books perfectly balanced. Newton's Third Law." },
+        { icon: "🌌", title: "Gravity's Long Game", desc: "Earth tugs. The station orbits. ARIA realizes: every law works together, invisibly choreographing the cosmos from planets down to pencils." },
+        { icon: "📐", title: "The Math Behind the Magic", desc: "F = ma appears as light on the visor. Not as a formula to memorize — as an equation she just lived, in three scenes of survival." },
+        { icon: "🧩", title: "Story Quiz", desc: "Why didn't the wrench slow down? What happens if ARIA doubles the thruster force? What pushed her forward when she fired backward?" }
+      ]
+    };
+  } else if (conceptLower.includes('photosynthesis') || conceptLower.includes('photo')) {
+    return {
+      title: "The Leaf's Secret Factory",
+      tagline: "Inside a single leaf, the most elegant energy conversion in nature unfolds.",
+      scenes: [
+        { icon: "☀️", title: "The Light Arrives", desc: "Sunlight hits the outer surface of a leaf. Photons — tiny packets of energy — begin their journey inward, like visitors entering a grand factory." },
+        { icon: "🌿", title: "Chlorophyll's Capture", desc: "Green molecules called chlorophyll act as solar panels — absorbing red and blue light, reflecting green (that's why leaves look green!). The factory powers up." },
+        { icon: "💧", title: "Water Travels Up", desc: "Roots pull water from soil. It climbs up the stem through tiny tubes — xylem — like an elevator. Water arrives at the leaf's inner chamber." },
+        { icon: "🔬", title: "The Calvin Cycle Workshop", desc: "CO₂ from the air enters through tiny pores. Inside the chloroplast, light energy splits water and powers a cycle that builds glucose — the leaf's food." },
+        { icon: "🍬", title: "Glucose and Oxygen Released", desc: "Glucose flows to every cell in the plant for energy. Oxygen — a byproduct — is released into the air. The breath we take is a gift from photosynthesis." },
+        { icon: "🧩", title: "Story Quiz", desc: "What would happen if all chlorophyll was removed? Why does a plant in a dark room eventually die? Where does the oxygen we breathe actually come from?" }
+      ]
+    };
+  } else if (conceptLower.includes('recursion') || conceptLower.includes('recursive')) {
+    return {
+      title: "The Mirror That Mirrors Mirrors",
+      tagline: "A function meets itself — and discovers the trick of making complex things infinitely simple.",
+      scenes: [
+        { icon: "🪞", title: "A Hallway of Mirrors", desc: "ZAX the robot stands between two mirrors facing each other. The reflection shows ZAX, inside a reflection of ZAX, inside another... infinite but patterned." },
+        { icon: "📦", title: "The Nested Box Problem", desc: "ZAX must count all gifts inside a giant box. Inside is another box. Inside that, another. ZAX's solution: open one box, count its gifts, then call itself to open the next box." },
+        { icon: "🛑", title: "The Base Case — or Else Forever", desc: "ZAX learns the most critical rule: every recursion needs a stopping condition. Without a base case, ZAX would open boxes forever — a stack overflow disaster." },
+        { icon: "📊", title: "The Call Stack Visualized", desc: "Each function call stacks on top of the last. When the base case triggers, answers bubble back down the stack — each level solved by the one below it." },
+        { icon: "🌳", title: "Real World: The Factorial Tree", desc: "5! = 5 × 4! = 5 × 4 × 3! = ... ZAX traces the tree all the way to 1! = 1, then climbs back up multiplying. The answer builds itself from the bottom." },
+        { icon: "🧩", title: "Story Quiz", desc: "What happens when a recursive function has no base case? If factorial(3) = 3 × factorial(2), what is factorial(2)? What's the difference between a loop and recursion?" }
+      ]
+    };
+  } else if (conceptLower.includes('supply') || conceptLower.includes('demand')) {
+    return {
+      title: "The Mango Market of Madurai",
+      tagline: "In a bustling market, invisible forces of supply and demand play out every single day.",
+      scenes: [
+        { icon: "🥭", title: "The Season Begins", desc: "It's mango harvest. Farmers flood the Madurai market with crates of Alphonso mangoes. Supply is high — stalls overflow. Prices drop to move the fruit fast." },
+        { icon: "📉", title: "Too Much, Too Cheap", desc: "With 50 sellers competing, each drops prices to attract the same buyers. This is supply exceeding demand — the invisible hand pushing prices down." },
+        { icon: "🌧️", title: "The Drought Arrives", desc: "Next season, rains fail. Only 10 farmers can supply half the usual mangoes. But the same 1,000 buyers still crave them. Scarcity meets desire." },
+        { icon: "📈", title: "Prices Climb", desc: "Buyers compete against each other, willing to pay more. Prices rise until only those who value mangoes most — or can afford them — take them home." },
+        { icon: "⚖️", title: "Equilibrium — Where They Meet", desc: "Eventually, supply adjusts (more farmers plant) and demand cools (buyers find alternatives). The market finds its balance point — the equilibrium price." },
+        { icon: "🧩", title: "Story Quiz", desc: "If mango prices double, what happens to the number of buyers? If farmers start earning more from mangoes, what happens to supply next season?" }
+      ]
+    };
+  } else {
+    return {
+      title: `${concept} — The Animated Story`,
+      tagline: "An AI-crafted narrative that makes this concept impossible to forget.",
+      scenes: [
+        { icon: "🌅", title: "The Ordinary World", desc: `We meet our hero — a curious student who has read about ${concept} but never truly felt it. Something essential is missing from the textbook version.` },
+        { icon: "✦", title: "The Concept Awakens", desc: `The AI Guide appears and says: "${concept} isn't just a definition. It's a pattern that shapes the world around you — right now, invisibly."` },
+        { icon: "🎭", title: "Entering the World", desc: `Our hero steps into an animated world where ${concept} is made visible — real characters, real consequences, real stakes attached to the idea.` },
+        { icon: "💡", title: "The Turning Point", desc: `A challenge arises that can only be solved by truly understanding ${concept}. The hero must apply it, not recite it. The insight crystallizes.` },
+        { icon: "🏆", title: "The Revelation", desc: `${concept} reveals its deeper truth — why it exists, what it explains, why it matters. The hero — and the student — can never unsee it now.` },
+        { icon: "🧩", title: "Story Quiz", desc: `Three questions emerge from the events of the story. Not from the textbook — from the experience just lived. The student knows the answers.` }
+      ]
+    };
+  }
+}
+
+function renderStory(story, concept) {
+  document.getElementById('storyTitle').textContent = story.title;
+  document.getElementById('storyTagline').textContent = story.tagline;
+
+  const meta = document.getElementById('storyMeta');
+  meta.innerHTML = [
+    `<span style="background:rgba(91,78,255,0.15);border:1px solid rgba(91,78,255,0.3);color:var(--aurora);padding:0.25rem 0.65rem;border-radius:100px;font-size:0.75rem;font-weight:600;">🎬 6 Scenes</span>`,
+    `<span style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);color:var(--mint);padding:0.25rem 0.65rem;border-radius:100px;font-size:0.75rem;font-weight:600;">⏱ ~4 min video</span>`,
+    `<span style="background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);color:var(--sky);padding:0.25rem 0.65rem;border-radius:100px;font-size:0.75rem;font-weight:600;">🧠 Memory-first design</span>`
+  ].join('');
+
+  const scenesEl = document.getElementById('storyScenes');
+  scenesEl.innerHTML = story.scenes.map((s, i) => `
+    <div class="demo-scene-card">
+      <div class="scene-num">Scene ${String(i+1).padStart(2,'0')}</div>
+      <div class="scene-icon">${s.icon}</div>
+      <div class="scene-title">${s.title}</div>
+      <div class="scene-desc">${s.desc}</div>
+    </div>
+  `).join('');
+}
+
+// Allow Enter (with Shift for newline) to generate
+document.getElementById('demoInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    generateDemo();
+  }
+});
+</script>
+</body>
+</html>
